@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Donors - BloodCare</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f6f7fb;
+            color: #333;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #b91c1c;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .nav-item {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 13px 16px;
+            margin: 6px 0;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,0.18);
+        }
+
+        .bottom-menu {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            height: 75px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fee2e2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .account-name {
+            font-weight: bold;
+        }
+
+        .account-role {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 30px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+        }
+
+        .page-heading p {
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .add-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* SEARCH / FILTER */
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .filter-box input,
+        .filter-box select {
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            min-width: 180px;
+        }
+
+        .filter-btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #374151;
+            color: white;
+        }
+
+        .clear-btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        /* TABLE */
+        .table-box {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f9fafb;
+            text-align: left;
+            padding: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .blood {
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .eligible {
+            background: #dcfce7;
+            color: #166534;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .not-eligible {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 500px;
+            max-width: 90%;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 21px;
+        }
+
+        .close {
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            padding: 11px 18px;
+            border: none;
+            background: #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            padding: 11px 18px;
+            border: none;
+            background: #dc2626;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        @media(max-width: 800px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+            }
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        🩸 BloodCare
+    </div>
+
+    <a href="/index.html" class="nav-item">
+        📊 Dashboard
+    </a>
+
+    <a href="/donors.html" class="nav-item active">
+        👥 Donors
+    </a>
+
+    <a href="/inventory.html" class="nav-item">
+        🩸 Blood Inventory
+    </a>
+
+    <a href="/requests.html" class="nav-item">
+        📋 Blood Requests
+    </a>
+
+    <a href="/users.html" class="nav-item">
+        👤 Users
+    </a>
+
+    <div class="bottom-menu">
+
+        <a href="/settings.html" class="nav-item">
+            ⚙️ Settings
+        </a>
+
+        <a href="#" class="nav-item" onclick="logout(); return false;">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div class="header-title">
+            Donors
+        </div>
+
+        <div class="account">
+
+            <div class="avatar">
+                👤
+            </div>
+
+            <div>
+                <div class="account-name" id="loggedInUsername">
+                    User
+                </div>
+
+                <div class="account-role">
+                    Blood Bank User
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <div class="page-heading">
+
+            <div>
+                <h2>Donor Management</h2>
+                <p>Manage blood donors and their eligibility.</p>
+            </div>
+
+            <button class="add-btn" onclick="openAddModal()">
+                + Add Donor
+            </button>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+        <div id="message" class="message"></div>
+
+
+        <!-- FILTER -->
+        <div class="filter-box">
+
+            <input
+                type="text"
+                id="searchName"
+                placeholder="Search donor name">
+
+            <select id="bloodGroupFilter">
+
+                <option value="">All Blood Groups</option>
+
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+
+            </select>
+
+            <button class="filter-btn" onclick="applyFilter()">
+                Search
+            </button>
+
+            <button class="clear-btn" onclick="loadDonors()">
+                Clear
+            </button>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Blood Group</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Last Donation</th>
+                        <th>Eligibility</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="donorTable">
+
+                    <tr>
+                        <td colspan="10" class="empty">
+                            Loading donors...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODAL -->
+<div class="modal" id="donorModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 id="modalTitle">
+                Add Donor
+            </h3>
+
+            <span class="close" onclick="closeModal()">
+                &times;
+            </span>
+
+        </div>
+
+
+        <form id="donorForm">
+
+            <input type="hidden" id="donorId">
+
+
+            <div class="form-group">
+
+                <label>Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Age</label>
+
+                <input
+                    type="number"
+                    id="age"
+                    min="1"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Gender</label>
+
+                <select id="gender" required>
+
+                    <option value="">
+                        Select Gender
+                    </option>
+
+                    <option value="Male">
+                        Male
+                    </option>
+
+                    <option value="Female">
+                        Female
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Blood Group</label>
+
+                <select id="bloodGroup" required>
+
+                    <option value="">
+                        Select Blood Group
+                    </option>
+
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Phone</label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Last Donation Date</label>
+
+                <input
+                    type="date"
+                    id="lastDonationDate">
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    Save Donor
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- AUTH -->
+<script src="/js/auth.js"></script>
+
+
+<script>
+
+    let editingId = null;
+
+
+    // Display logged-in username
+    document.addEventListener("DOMContentLoaded", function() {
+
+        displayUsername();
+
+        loadDonors();
+
+    });
+
+
+    // LOAD ALL DONORS
+    async function loadDonors() {
+
+        try {
+
+            const response = await apiFetch("/donors");
+
+            if (!response) return;
+
+            if (!response.ok) {
+
+                throw new Error("Unable to load donors");
+
+            }
+
+            const donors = await response.json();
+
+            displayDonors(donors);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to load donors. Please check the server.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // DISPLAY DONORS
+    function displayDonors(donors) {
+
+        const table =
+            document.getElementById("donorTable");
+
+        table.innerHTML = "";
+
+
+        if (!donors || donors.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="10" class="empty">
+                        No donors found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        donors.forEach(function(donor) {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>${donor.donorId ?? ""}</td>
+
+                <td>${escapeHtml(donor.name ?? "")}</td>
+
+                <td>${donor.age ?? ""}</td>
+
+                <td>${escapeHtml(donor.gender ?? "")}</td>
+
+                <td class="blood">
+                    ${escapeHtml(donor.bloodGroup ?? "")}
+                </td>
+
+                <td>${escapeHtml(donor.phone ?? "")}</td>
+
+                <td>${escapeHtml(donor.email ?? "")}</td>
+
+                <td>${donor.lastDonationDate ?? "Never"}</td>
+
+                <td>
+
+                    ${
+                        donor.eligible
+                        ?
+                        '<span class="eligible">Eligible</span>'
+                        :
+                        '<span class="not-eligible">Not Eligible</span>'
+                    }
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        onclick="editDonor(${donor.donorId})">
+
+                        Edit
+
+                    </button>
+
+                    <button
+                        class="action-btn delete-btn"
+                        onclick="deleteDonor(${donor.donorId})">
+
+                        Delete
+
+                    </button>
+
+                </td>
+
+            `;
+
+            table.appendChild(row);
+
+        });
+
+    }
+
+
+    // SEARCH / FILTER
+    async function applyFilter() {
+
+        const name =
+            document.getElementById("searchName").value.trim();
+
+        const bloodGroup =
+            document.getElementById("bloodGroupFilter").value;
+
+
+        try {
+
+            let url = "/donors";
+
+
+            if (name) {
+
+                url =
+                    "/donors/name/" +
+                    encodeURIComponent(name);
+
+            } else if (bloodGroup) {
+
+                url =
+                    "/donors/blood/" +
+                    encodeURIComponent(bloodGroup);
+
+            }
+
+
+            const response =
+                await apiFetch(url);
+
+
+            if (!response || !response.ok) {
+
+                throw new Error("Search failed");
+
+            }
+
+
+            const donors =
+                await response.json();
+
+            displayDonors(donors);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to search donors.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // OPEN ADD MODAL
+    function openAddModal() {
+
+        editingId = null;
+
+        document.getElementById("modalTitle").textContent =
+            "Add Donor";
+
+        document.getElementById("donorForm").reset();
+
+        document.getElementById("donorId").value = "";
+
+        document.getElementById("donorModal").style.display =
+            "flex";
+
+    }
+
+
+    // EDIT DONOR
+    async function editDonor(id) {
+
+        try {
+
+            const response =
+                await apiFetch("/donors/" + id);
+
+
+            if (!response || !response.ok) {
+
+                throw new Error("Donor not found");
+
+            }
+
+
+            const donor =
+                await response.json();
+
+
+            editingId = id;
+
+
+            document.getElementById("modalTitle").textContent =
+                "Edit Donor";
+
+
+            document.getElementById("donorId").value =
+                donor.donorId ?? "";
+
+            document.getElementById("name").value =
+                donor.name ?? "";
+
+            document.getElementById("age").value =
+                donor.age ?? "";
+
+            document.getElementById("gender").value =
+                donor.gender ?? "";
+
+            document.getElementById("bloodGroup").value =
+                donor.bloodGroup ?? "";
+
+            document.getElementById("phone").value =
+                donor.phone ?? "";
+
+            document.getElementById("email").value =
+                donor.email ?? "";
+
+            document.getElementById("lastDonationDate").value =
+                donor.lastDonationDate ?? "";
+
+
+            document.getElementById("donorModal").style.display =
+                "flex";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to load donor details.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // SAVE DONOR
+    document
+        .getElementById("donorForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const donor = {
+
+                name:
+                    document.getElementById("name").value.trim(),
+
+                age:
+                    Number(document.getElementById("age").value),
+
+                gender:
+                    document.getElementById("gender").value,
+
+                bloodGroup:
+                    document.getElementById("bloodGroup").value,
+
+                phone:
+                    document.getElementById("phone").value.trim(),
+
+                email:
+                    document.getElementById("email").value.trim(),
+
+                lastDonationDate:
+                    document.getElementById("lastDonationDate").value || null
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (editingId) {
+
+                    response =
+                        await apiFetch(
+                            "/donors/" + editingId,
+                            {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+                                body:
+                                    JSON.stringify(donor)
+                            }
+                        );
+
+                } else {
+
+                    response =
+                        await apiFetch(
+                            "/donors",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+                                body:
+                                    JSON.stringify(donor)
+                            }
+                        );
+
+                }
+
+
+                if (!response || !response.ok) {
+
+                    const errorText =
+                        await response.text();
+
+                    throw new Error(errorText);
+
+                }
+
+
+                closeModal();
+
+                showMessage(
+                    editingId
+                        ? "Donor updated successfully."
+                        : "Donor added successfully.",
+                    "success"
+                );
+
+
+                loadDonors();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Unable to save donor.",
+                    "error"
+                );
+
+            }
+
+        });
+
+
+    // DELETE DONOR
+    async function deleteDonor(id) {
+
+        if (!confirm(
+            "Are you sure you want to delete this donor?"
+        )) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await apiFetch(
+                    "/donors/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response || !response.ok) {
+
+                throw new Error("Delete failed");
+
+            }
+
+
+            showMessage(
+                "Donor deleted successfully.",
+                "success"
+            );
+
+
+            loadDonors();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to delete donor.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // CLOSE MODAL
+    function closeModal() {
+
+        document.getElementById("donorModal").style.display =
+            "none";
+
+    }
+
+
+    // MESSAGE
+    function showMessage(message, type) {
+
+        const element =
+            document.getElementById("message");
+
+
+        element.textContent = message;
+
+        element.style.display = "block";
+
+
+        if (type === "success") {
+
+            element.style.background = "#dcfce7";
+            element.style.color = "#166534";
+
+        } else {
+
+            element.style.background = "#fee2e2";
+            element.style.color = "#991b1b";
+
+        }
+
+
+        setTimeout(function() {
+
+            element.style.display = "none";
+
+        }, 3000);
+
+    }
+
+
+    // BASIC HTML ESCAPING
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // CLOSE MODAL WHEN CLICKING OUTSIDE
+    window.onclick = function(event) {
+
+        const modal =
+            document.getElementById("donorModal");
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - BloodCare</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5f5,
+                    #ffe1e1
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+
+        /* ================= MAIN CONTAINER ================= */
+
+        .container {
+
+            width: 900px;
+
+            max-width: 100%;
+
+            min-height: 560px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            display: flex;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        /* ================= LEFT SIDE ================= */
+
+        .left-section {
+
+            width: 45%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d92323,
+                    #a91515
+                );
+
+            color: white;
+
+            padding: 50px 40px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+        }
+
+
+        .blood-icon {
+
+            width: 90px;
+
+            height: 90px;
+
+            background:
+                rgba(255,255,255,0.15);
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 48px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .left-section h1 {
+
+            font-size: 36px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .left-section h3 {
+
+            font-size: 19px;
+
+            font-weight: normal;
+
+            margin-bottom: 18px;
+        }
+
+
+        .left-section p {
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            opacity: 0.9;
+
+            max-width: 330px;
+        }
+
+
+        .heart-line {
+
+            margin-top: 30px;
+
+            font-size: 28px;
+        }
+
+
+        /* ================= RIGHT SIDE ================= */
+
+        .right-section {
+
+            width: 55%;
+
+            padding: 50px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        .form-container {
+
+            width: 100%;
+
+            max-width: 400px;
+
+            margin: auto;
+        }
+
+
+        .form-container h2 {
+
+            font-size: 30px;
+
+            color: #333;
+
+            margin-bottom: 8px;
+        }
+
+
+        .form-subtitle {
+
+            color: #777;
+
+            font-size: 14px;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #444;
+
+            margin-bottom: 8px;
+        }
+
+
+        .input-box {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            font-size: 17px;
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            padding: 13px 14px 13px 45px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #d92323;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(217,35,35,0.1);
+        }
+
+
+        /* ================= PASSWORD ================= */
+
+        .password-wrapper {
+
+            position: relative;
+        }
+
+
+        .password-wrapper input {
+
+            padding-right: 50px;
+        }
+
+
+        .show-password {
+
+            position: absolute;
+
+            right: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            cursor: pointer;
+
+            color: #777;
+
+            font-size: 17px;
+        }
+
+
+        /* ================= LOGIN BUTTON ================= */
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #d92323;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+
+            transition: 0.2s;
+        }
+
+
+        .login-button:hover {
+
+            background: #b91d1d;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .login-button:disabled {
+
+            background: #aaa;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* ================= MESSAGE ================= */
+
+        #loginMessage {
+
+            display: none;
+
+            padding: 12px;
+
+            margin-top: 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+
+        .error-message {
+
+            background: #fdecec;
+
+            color: #c62828;
+        }
+
+
+        .success-message {
+
+            background: #e8f5e9;
+
+            color: #2e7d32;
+        }
+
+
+        /* ================= CREATE ACCOUNT ================= */
+
+        .create-account {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        .create-account button {
+
+            background: none;
+
+            border: none;
+
+            color: #d92323;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        .create-account button:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* ================= REGISTER FORM ================= */
+
+        #registerSection {
+
+            display: none;
+        }
+
+
+        .back-login {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        .back-login button {
+
+            background: none;
+
+            border: none;
+
+            color: #d92323;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 750px) {
+
+            .container {
+
+                flex-direction: column;
+
+                width: 500px;
+            }
+
+
+            .left-section {
+
+                width: 100%;
+
+                padding: 35px 25px;
+            }
+
+
+            .left-section h1 {
+
+                font-size: 30px;
+            }
+
+
+            .left-section p {
+
+                display: none;
+            }
+
+
+            .heart-line {
+
+                display: none;
+            }
+
+
+            .right-section {
+
+                width: 100%;
+
+                padding: 35px 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= MAIN CONTAINER ================= -->
+
+    <div class="container">
+
+
+        <!-- ================= LEFT ================= -->
+
+        <div class="left-section">
+
+
+            <div class="blood-icon">
+                🩸
+            </div>
+
+
+            <h1>
+                BloodCare
+            </h1>
+
+
+            <h3>
+                Blood Bank Management System
+            </h3>
+
+
+            <p>
+
+                Manage donors, monitor blood
+                inventory and handle patient
+                blood requests efficiently
+                from one centralized system.
+
+            </p>
+
+
+            <div class="heart-line">
+                ❤️ 🩸 ❤️
+            </div>
+
+
+        </div>
+
+
+        <!-- ================= RIGHT ================= -->
+
+        <div class="right-section">
+
+
+            <div class="form-container">
+
+
+                <!-- ================= LOGIN ================= -->
+
+                <div id="loginSection">
+
+
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+
+                    <p class="form-subtitle">
+
+                        Sign in to your BloodCare account
+
+                    </p>
+
+
+                    <form id="loginForm">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="form-group">
+
+
+                            <label>
+                                Username
+                            </label>
+
+
+                            <div class="input-box">
+
+
+                                <span class="input-icon">
+                                    👤
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    id="loginUsername"
+                                    placeholder="Enter your username"
+                                    required>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+
+                            <label>
+                                Password
+                            </label>
+
+
+                            <div class="input-box password-wrapper">
+
+
+                                <span class="input-icon">
+                                    🔒
+                                </span>
+
+
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    placeholder="Enter your password"
+                                    required>
+
+
+                                <span
+                                    class="show-password"
+                                    onclick="togglePassword(
+                                        'loginPassword',
+                                        this
+                                    )">
+
+                                    👁
+
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- LOGIN BUTTON -->
+
+                        <button
+                            type="submit"
+                            class="login-button"
+                            id="loginButton">
+
+                            Sign In
+
+                        </button>
+
+
+                    </form>
+
+
+                    <!-- MESSAGE -->
+
+                    <div id="loginMessage"></div>
+
+
+                    <!-- CREATE ACCOUNT -->
+
+                    <div class="create-account">
+
+                        Don't have an account?
+
+                        <button
+                            type="button"
+                            onclick="showRegister()">
+
+                            Create Account
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ================= REGISTER ================= -->
+
+                <div id="registerSection">
+
+
+                    <h2>
+                        Create Account
+                    </h2>
+
+
+                    <p class="form-subtitle">
+
+                        Create your BloodCare staff account
+
+                    </p>
+
+
+                    <form id="registerForm">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="form-group">
+
+
+                            <label>
+                                Username
+                            </label>
+
+
+                            <div class="input-box">
+
+
+                                <span class="input-icon">
+                                    👤
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    id="registerUsername"
+                                    placeholder="Choose a username"
+                                    required>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+
+                            <label>
+                                Password
+                            </label>
+
+
+                            <div class="input-box password-wrapper">
+
+
+                                <span class="input-icon">
+                                    🔒
+                                </span>
+
+
+                                <input
+                                    type="password"
+                                    id="registerPassword"
+                                    placeholder="Create a password"
+                                    required>
+
+
+                                <span
+                                    class="show-password"
+                                    onclick="togglePassword(
+                                        'registerPassword',
+                                        this
+                                    )">
+
+                                    👁
+
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group">
+
+
+                            <label>
+                                Confirm Password
+                            </label>
+
+
+                            <div class="input-box password-wrapper">
+
+
+                                <span class="input-icon">
+                                    🔒
+                                </span>
+
+
+                                <input
+                                    type="password"
+                                    id="confirmRegisterPassword"
+                                    placeholder="Confirm your password"
+                                    required>
+
+
+                                <span
+                                    class="show-password"
+                                    onclick="togglePassword(
+                                        'confirmRegisterPassword',
+                                        this
+                                    )">
+
+                                    👁
+
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- REGISTER BUTTON -->
+
+                        <button
+                            type="submit"
+                            class="login-button">
+
+                            Create Account
+
+                        </button>
+
+
+                    </form>
+
+
+                    <!-- REGISTER MESSAGE -->
+
+                    <div id="registerMessage"></div>
+
+
+                    <!-- BACK TO LOGIN -->
+
+                    <div class="back-login">
+
+                        Already have an account?
+
+                        <button
+                            type="button"
+                            onclick="showLogin()">
+
+                            Sign In
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+
+        /* ================= SHOW LOGIN ================= */
+
+        function showLogin() {
+
+            document.getElementById(
+                "loginSection"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "registerSection"
+            ).style.display =
+                "none";
+
+        }
+
+
+        /* ================= SHOW REGISTER ================= */
+
+        function showRegister() {
+
+            document.getElementById(
+                "loginSection"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "registerSection"
+            ).style.display =
+                "block";
+
+        }
+
+
+        /* ================= PASSWORD TOGGLE ================= */
+
+        function togglePassword(
+            inputId,
+            element
+        ) {
+
+
+            const input =
+                document.getElementById(
+                    inputId
+                );
+
+
+            if (
+                input.type ===
+                "password"
+            ) {
+
+                input.type =
+                    "text";
+
+                element.textContent =
+                    "🙈";
+
+            }
+            else {
+
+                input.type =
+                    "password";
+
+                element.textContent =
+                    "👁";
+
+            }
+
+        }
+
+
+        /* ================= LOGIN ================= */
+
+        document.getElementById(
+            "loginForm"
+        ).addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document.getElementById(
+                        "loginUsername"
+                    ).value.trim();
+
+
+                const password =
+                    document.getElementById(
+                        "loginPassword"
+                    ).value;
+
+
+                const message =
+                    document.getElementById(
+                        "loginMessage"
+                    );
+
+
+                const button =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+
+                /* CLEAR MESSAGE */
+
+                message.style.display =
+                    "none";
+
+
+                /* DISABLE BUTTON */
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "Signing In...";
+
+
+                try {
+
+
+                    /*
+                     * First check login
+                     * against Spring Boot.
+                     */
+
+                    const loginResponse =
+                        await fetch(
+                            "/users/login",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        username:
+                                            username,
+
+                                        password:
+                                            password
+
+                                    })
+
+                            }
+                        );
+
+
+                    const loginResult =
+                        await loginResponse.text();
+
+
+                    /* LOGIN FAILED */
+
+                    if (
+                        loginResult !==
+                        "Login successful"
+                    ) {
+
+                        message.style.display =
+                            "block";
+
+                        message.className =
+                            "error-message";
+
+                        message.textContent =
+                            loginResult ||
+                            "Invalid username or password.";
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Login successful.
+                     *
+                     * Store Basic Auth credentials
+                     * for protected API calls.
+                     */
+
+                    const auth =
+                        btoa(
+                            username +
+                            ":" +
+                            password
+                        );
+
+
+                    sessionStorage.setItem(
+                        "bloodcareAuth",
+                        auth
+                    );
+
+
+                    sessionStorage.setItem(
+                        "bloodcareUsername",
+                        username
+                    );
+
+
+                    /*
+                     * Find the user's role.
+                     *
+                     * We call /users/all using
+                     * the logged-in credentials.
+                     *
+                     * ADMIN and STAFF can both
+                     * access this endpoint.
+                     */
+
+                    let role =
+                        "STAFF";
+
+
+                    try {
+
+
+                        const userResponse =
+                            await fetch(
+                                "/users/all",
+                                {
+
+                                    headers: {
+
+                                        "Authorization":
+                                            "Basic " +
+                                            auth
+
+                                    }
+
+                                }
+                            );
+
+
+                        if (
+                            userResponse.ok
+                        ) {
+
+
+                            const users =
+                                await userResponse.json();
+
+
+                            const currentUser =
+                                users.find(
+                                    function (user) {
+
+                                        return (
+                                            user.username
+                                                .toLowerCase()
+                                            ===
+                                            username.toLowerCase()
+                                        );
+
+                                    }
+                                );
+
+
+                            if (
+                                currentUser &&
+                                currentUser.role
+                            ) {
+
+                                role =
+                                    currentUser.role
+                                        .toUpperCase();
+
+                            }
+
+                        }
+
+                    }
+                    catch (error) {
+
+                        console.log(
+                            "Could not retrieve role."
+                        );
+
+                    }
+
+
+                    sessionStorage.setItem(
+                        "bloodcareRole",
+                        role
+                    );
+
+
+                    /* SUCCESS */
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "success-message";
+
+                    message.textContent =
+                        "Login successful. Redirecting...";
+
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "/index.html";
+
+                        },
+                        700
+                    );
+
+
+                }
+                catch (error) {
+
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "error-message";
+
+                    message.textContent =
+                        "Unable to connect to the server. Please make sure Spring Boot is running.";
+
+                }
+                finally {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "Sign In";
+
+                }
+
+            }
+        );
+
+
+        /* ================= REGISTER ================= */
+
+        document.getElementById(
+            "registerForm"
+        ).addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document.getElementById(
+                        "registerUsername"
+                    ).value.trim();
+
+
+                const password =
+                    document.getElementById(
+                        "registerPassword"
+                    ).value;
+
+
+                const confirmPassword =
+                    document.getElementById(
+                        "confirmRegisterPassword"
+                    ).value;
+
+
+                const message =
+                    document.getElementById(
+                        "registerMessage"
+                    );
+
+
+                message.style.display =
+                    "none";
+
+
+                /* CHECK USERNAME */
+
+                if (
+                    username.length < 3
+                ) {
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "error-message";
+
+                    message.textContent =
+                        "Username must contain at least 3 characters.";
+
+                    return;
+
+                }
+
+
+                /* CHECK PASSWORD */
+
+                if (
+                    password.length < 4
+                ) {
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "error-message";
+
+                    message.textContent =
+                        "Password must contain at least 4 characters.";
+
+                    return;
+
+                }
+
+
+                /* CHECK PASSWORD MATCH */
+
+                if (
+                    password !==
+                    confirmPassword
+                ) {
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "error-message";
+
+                    message.textContent =
+                        "Passwords do not match.";
+
+                    return;
+
+                }
+
+
+                try {
+
+
+                    const response =
+                        await fetch(
+                            "/users/register",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        username:
+                                            username,
+
+                                        password:
+                                            password,
+
+                                        role:
+                                            "STAFF"
+
+                                    })
+
+                            }
+                        );
+
+
+                    const result =
+                        await response.text();
+
+
+                    message.style.display =
+                        "block";
+
+
+                    if (
+                        result ===
+                        "User registered successfully"
+                    ) {
+
+
+                        message.className =
+                            "success-message";
+
+
+                        message.textContent =
+                            "Account created successfully. Please sign in.";
+
+
+                        document.getElementById(
+                            "registerForm"
+                        ).reset();
+
+
+                        setTimeout(
+                            function () {
+
+                                showLogin();
+
+                                document.getElementById(
+                                    "loginUsername"
+                                ).value =
+                                    username;
+
+                            },
+                            1200
+                        );
+
+
+                    }
+                    else {
+
+
+                        message.className =
+                            "error-message";
+
+
+                        message.textContent =
+                            result;
+
+                    }
+
+
+                }
+                catch (error) {
+
+
+                    console.error(
+                        "Registration error:",
+                        error
+                    );
+
+
+                    message.style.display =
+                        "block";
+
+
+                    message.className =
+                        "error-message";
+
+
+                    message.textContent =
+                        "Unable to connect to the server.";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

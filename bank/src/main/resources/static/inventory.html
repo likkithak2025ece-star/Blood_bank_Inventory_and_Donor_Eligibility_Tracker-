@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blood Inventory - BloodCare</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f8fc;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            background: #d62828;
+            color: white;
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 13px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bottom-menu {
+            margin-top: auto;
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+        }
+
+        /* HEADER */
+        .header {
+            height: 75px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 35px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #d62828;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .profile-info {
+            line-height: 1.3;
+        }
+
+        .profile-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .profile-role {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .arrow {
+            font-size: 18px;
+            color: #777;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 35px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            color: #777;
+        }
+
+        .add-btn {
+            background: #d62828;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .add-btn:hover {
+            background: #b71c1c;
+        }
+
+        /* INVENTORY CARDS */
+        .inventory-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .blood-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .blood-group {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d62828;
+        }
+
+        .blood-quantity {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .units {
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* TABLE */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            overflow-x: auto;
+        }
+
+        .table-container h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #ffe5e5;
+            color: #d62828;
+        }
+
+        .delete-btn {
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 450px;
+            max-width: 90%;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            background: #d62828;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .inventory-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .inventory-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🩸 BloodCare
+        </div>
+
+        <nav class="nav-menu">
+
+            <a href="/index.html" class="nav-item">
+                📊 Dashboard
+            </a>
+
+            <a href="/donors.html" class="nav-item">
+                👥 Donors
+            </a>
+
+            <a href="/inventory.html" class="nav-item active">
+                🩸 Blood Inventory
+            </a>
+
+            <a href="/requests.html" class="nav-item">
+                📋 Blood Requests
+            </a>
+
+            <a href="/users.html" class="nav-item">
+                👤 Users
+            </a>
+
+        </nav>
+
+        <div class="bottom-menu">
+
+            <a href="/settings.html" class="nav-item">
+                ⚙️ Settings
+            </a>
+
+            <a href="#" class="nav-item"
+               onclick="logout(); return false;">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div class="profile">
+
+                <div class="avatar">
+                    👤
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-name" id="loggedInUsername">
+                        User
+                    </div>
+
+                    <div class="profile-role">
+                        Blood Bank Staff
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    ⌄
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="content">
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div>
+                    <h1>Blood Inventory</h1>
+
+                    <p>
+                        Manage and monitor available blood units.
+                    </p>
+                </div>
+
+                <button class="add-btn" onclick="openAddModal()">
+                    + Add Blood
+                </button>
+
+            </div>
+
+
+            <!-- BLOOD GROUP CARDS -->
+            <div class="inventory-cards">
+
+                <div class="blood-card">
+                    <div class="blood-group">A+</div>
+                    <div class="blood-quantity" id="Apositive">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">A-</div>
+                    <div class="blood-quantity" id="Anegative">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">B+</div>
+                    <div class="blood-quantity" id="Bpositive">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">B-</div>
+                    <div class="blood-quantity" id="Bnegative">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">AB+</div>
+                    <div class="blood-quantity" id="ABpositive">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">AB-</div>
+                    <div class="blood-quantity" id="ABnegative">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">O+</div>
+                    <div class="blood-quantity" id="Opositive">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+                <div class="blood-card">
+                    <div class="blood-group">O-</div>
+                    <div class="blood-quantity" id="Onegative">0</div>
+                    <div class="units">units available</div>
+                </div>
+
+            </div>
+
+
+            <!-- TABLE -->
+            <div class="table-container">
+
+                <h2>Inventory Records</h2>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Blood Group</th>
+                            <th>Quantity</th>
+                            <th>Expiry Date</th>
+                            <th>Storage Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="inventoryTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal" id="inventoryModal">
+
+    <div class="modal-content">
+
+        <h2 id="modalTitle">
+            Add Blood Inventory
+        </h2>
+
+        <form id="inventoryForm">
+
+            <input type="hidden" id="inventoryId">
+
+            <div class="form-group">
+
+                <label for="bloodGroup">
+                    Blood Group
+                </label>
+
+                <select id="bloodGroup" required>
+
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="quantity">
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="expiryDate">
+                    Expiry Date
+                </label>
+
+                <input
+                    type="date"
+                    id="expiryDate"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="storageLocation">
+                    Storage Location
+                </label>
+
+                <input
+                    type="text"
+                    id="storageLocation"
+                    placeholder="Example: Refrigerator A"
+                    required
+                >
+
+            </div>
+
+
+            <div class="modal-buttons">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- AUTH -->
+<script src="/js/auth.js"></script>
+
+
+<script>
+
+    let inventoryData = [];
+
+
+    /* DISPLAY LOGGED-IN USER */
+
+    displayUsername();
+
+
+    /* LOAD INVENTORY */
+
+    async function loadInventory() {
+
+        try {
+
+            const response = await apiFetch("/inventory");
+
+            if (!response || !response.ok) {
+                return;
+            }
+
+            inventoryData = await response.json();
+
+            displayInventory(inventoryData);
+
+            updateBloodCards(inventoryData);
+
+        } catch (error) {
+
+            console.error("Error loading inventory:", error);
+
+        }
+
+    }
+
+
+    /* DISPLAY TABLE */
+
+    function displayInventory(data) {
+
+        const tableBody =
+            document.getElementById("inventoryTableBody");
+
+        tableBody.innerHTML = "";
+
+
+        if (data.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        No inventory records found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        data.forEach(item => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+
+                <td>${item.inventoryId}</td>
+
+                <td>
+                    <strong>${item.bloodGroup}</strong>
+                </td>
+
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    ${item.expiryDate || "-"}
+                </td>
+
+                <td>
+                    ${item.storageLocation || "-"}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        onclick="editInventory(${item.inventoryId})">
+                        Edit
+                    </button>
+
+                    <button
+                        class="action-btn delete-btn"
+                        onclick="deleteInventory(${item.inventoryId})">
+                        Delete
+                    </button>
+
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+
+    /* UPDATE BLOOD GROUP CARDS */
+
+    function updateBloodCards(data) {
+
+        const totals = {
+
+            "A+": 0,
+            "A-": 0,
+            "B+": 0,
+            "B-": 0,
+            "AB+": 0,
+            "AB-": 0,
+            "O+": 0,
+            "O-": 0
+
+        };
+
+
+        data.forEach(item => {
+
+            if (totals[item.bloodGroup] !== undefined) {
+
+                totals[item.bloodGroup] +=
+                    Number(item.quantity || 0);
+
+            }
+
+        });
+
+
+        document.getElementById("Apositive").textContent =
+            totals["A+"];
+
+        document.getElementById("Anegative").textContent =
+            totals["A-"];
+
+        document.getElementById("Bpositive").textContent =
+            totals["B+"];
+
+        document.getElementById("Bnegative").textContent =
+            totals["B-"];
+
+        document.getElementById("ABpositive").textContent =
+            totals["AB+"];
+
+        document.getElementById("ABnegative").textContent =
+            totals["AB-"];
+
+        document.getElementById("Opositive").textContent =
+            totals["O+"];
+
+        document.getElementById("Onegative").textContent =
+            totals["O-"];
+
+    }
+
+
+    /* OPEN ADD MODAL */
+
+    function openAddModal() {
+
+        document.getElementById("modalTitle").textContent =
+            "Add Blood Inventory";
+
+        document.getElementById("inventoryForm").reset();
+
+        document.getElementById("inventoryId").value = "";
+
+        document.getElementById("inventoryModal").style.display =
+            "flex";
+
+    }
+
+
+    /* CLOSE MODAL */
+
+    function closeModal() {
+
+        document.getElementById("inventoryModal").style.display =
+            "none";
+
+    }
+
+
+    /* EDIT INVENTORY */
+
+    function editInventory(id) {
+
+        const item = inventoryData.find(
+            inventory => inventory.inventoryId === id
+        );
+
+
+        if (!item) {
+            alert("Inventory record not found.");
+            return;
+        }
+
+
+        document.getElementById("modalTitle").textContent =
+            "Edit Blood Inventory";
+
+        document.getElementById("inventoryId").value =
+            item.inventoryId;
+
+        document.getElementById("bloodGroup").value =
+            item.bloodGroup;
+
+        document.getElementById("quantity").value =
+            item.quantity;
+
+        document.getElementById("expiryDate").value =
+            item.expiryDate || "";
+
+        document.getElementById("storageLocation").value =
+            item.storageLocation || "";
+
+
+        document.getElementById("inventoryModal").style.display =
+            "flex";
+
+    }
+
+
+    /* SAVE / UPDATE */
+
+    document.getElementById("inventoryForm")
+        .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById("inventoryId").value;
+
+
+        const inventory = {
+
+            bloodGroup:
+                document.getElementById("bloodGroup").value,
+
+            quantity:
+                Number(document.getElementById("quantity").value),
+
+            expiryDate:
+                document.getElementById("expiryDate").value,
+
+            storageLocation:
+                document.getElementById("storageLocation").value
+
+        };
+
+
+        try {
+
+            let response;
+
+
+            if (id) {
+
+                response = await apiFetch(
+                    `/inventory/${id}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(inventory)
+                    }
+                );
+
+            } else {
+
+                response = await apiFetch(
+                    "/inventory",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(inventory)
+                    }
+                );
+
+            }
+
+
+            if (!response || !response.ok) {
+
+                alert("Unable to save inventory.");
+
+                return;
+            }
+
+
+            alert(
+                id
+                ? "Inventory updated successfully!"
+                : "Inventory added successfully!"
+            );
+
+
+            closeModal();
+
+            loadInventory();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Something went wrong.");
+
+        }
+
+    });
+
+
+    /* DELETE INVENTORY */
+
+    async function deleteInventory(id) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this inventory record?"
+            );
+
+
+        if (!confirmDelete) {
+            return;
+        }
+
+
+        try {
+
+            const response = await apiFetch(
+                `/inventory/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+            if (response && response.ok) {
+
+                alert("Inventory deleted successfully!");
+
+                loadInventory();
+
+            } else {
+
+                alert("Unable to delete inventory.");
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Something went wrong.");
+
+        }
+
+    }
+
+
+    /* LOAD PAGE */
+
+    loadInventory();
+
+</script>
+
+</body>
+</html>

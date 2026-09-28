@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Users - BloodCare</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #333;
+        }
+
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #d92323;
+
+            color: white;
+
+            padding: 25px 15px;
+        }
+
+
+        .logo {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .logo h2 {
+
+            font-size: 26px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .logo p {
+
+            font-size: 12px;
+
+            opacity: 0.85;
+        }
+
+
+        .menu {
+
+            list-style: none;
+        }
+
+
+        .menu li {
+
+            margin: 6px 0;
+        }
+
+
+        .menu a {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: white;
+
+            padding: 13px 15px;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+        }
+
+
+        .menu a:hover {
+
+            background:
+                rgba(255,255,255,0.15);
+        }
+
+
+        .menu a.active {
+
+            background:
+                rgba(255,255,255,0.22);
+
+            font-weight: bold;
+        }
+
+
+        /* ================= BOTTOM MENU ================= */
+
+        .bottom-menu {
+
+            position: absolute;
+
+            bottom: 20px;
+
+            left: 15px;
+
+            right: 15px;
+        }
+
+
+        .bottom-menu .menu {
+
+            display: block;
+        }
+
+
+        .bottom-menu .menu li {
+
+            display: block;
+
+            width: 100%;
+
+            margin: 5px 0;
+        }
+
+
+        .bottom-menu .menu a {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 12px 15px;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+
+            margin-left: 240px;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .header {
+
+            height: 75px;
+
+            background: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .header h2 {
+
+            font-size: 22px;
+
+            color: #333;
+        }
+
+
+        .account {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .avatar {
+
+            width: 42px;
+
+            height: 42px;
+
+            background: #d92323;
+
+            color: white;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+
+        .account-info strong {
+
+            display: block;
+
+            font-size: 14px;
+        }
+
+
+        .account-info span {
+
+            font-size: 12px;
+
+            color: #777;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .content {
+
+            padding: 35px;
+        }
+
+
+        .page-heading {
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-heading h1 {
+
+            font-size: 28px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .page-heading p {
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= INFO ================= */
+
+        .info-card {
+
+            background: white;
+
+            border-left: 5px solid #d92323;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0,0,0,0.05);
+        }
+
+
+        .info-card h3 {
+
+            color: #d92323;
+
+            margin-bottom: 8px;
+
+            font-size: 17px;
+        }
+
+
+        .info-card p {
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= TABLE ================= */
+
+        .table-container {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0,0,0,0.05);
+
+            overflow-x: auto;
+        }
+
+
+        .table-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .table-header h2 {
+
+            font-size: 20px;
+        }
+
+
+        .admin-badge {
+
+            background: #fdecec;
+
+            color: #c62828;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            background: #fafafa;
+
+            color: #555;
+
+            padding: 15px;
+
+            text-align: left;
+
+            font-size: 14px;
+
+            border-bottom: 2px solid #eee;
+        }
+
+
+        td {
+
+            padding: 15px;
+
+            border-bottom: 1px solid #eee;
+
+            font-size: 14px;
+        }
+
+
+        tr:hover {
+
+            background: #fafafa;
+        }
+
+
+        /* ================= ROLE ================= */
+
+        .role-badge {
+
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 15px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        .admin-role {
+
+            background: #fdecec;
+
+            color: #c62828;
+        }
+
+
+        .staff-role {
+
+            background: #e8f5e9;
+
+            color: #2e7d32;
+        }
+
+
+        /* ================= STATUS ================= */
+
+        .status-badge {
+
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 15px;
+
+            background: #e8f5e9;
+
+            color: #2e7d32;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        /* ================= ERROR ================= */
+
+        .error-message {
+
+            text-align: center;
+
+            color: #c62828;
+
+            padding: 20px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 200px;
+            }
+
+            .main {
+
+                margin-left: 200px;
+            }
+
+            .content {
+
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <div class="sidebar">
+
+
+        <div class="logo">
+
+            <h2>🩸 BloodCare</h2>
+
+            <p>
+                Blood Bank Management
+            </p>
+
+        </div>
+
+
+        <ul class="menu">
+
+
+            <li>
+
+                <a href="/index.html">
+
+                    📊 Dashboard
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="/donors.html">
+
+                    👥 Donors
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="/inventory.html">
+
+                    🩸 Blood Inventory
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="/requests.html">
+
+                    📋 Blood Requests
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="/users.html"
+                   class="active">
+
+                    👤 Users
+
+                </a>
+
+            </li>
+
+
+        </ul>
+
+
+        <!-- BOTTOM MENU -->
+
+        <div class="bottom-menu">
+
+
+            <ul class="menu">
+
+
+                <li>
+
+                    <a href="/settings.html">
+
+                        ⚙️ Settings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#"
+                       onclick="logout(); return false;">
+
+                        🚪 Logout
+
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+
+            <h2>
+                User Management
+            </h2>
+
+
+            <div class="account">
+
+
+                <div class="avatar">
+                    👤
+                </div>
+
+
+                <div class="account-info">
+
+                    <strong id="loggedInUsername">
+                        User
+                    </strong>
+
+                    <span>
+                        BloodCare Account
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <div class="content">
+
+
+            <div class="page-heading">
+
+                <h1>
+                    Users
+                </h1>
+
+                <p>
+                    View registered BloodCare users
+                    and their roles.
+                </p>
+
+            </div>
+
+
+            <!-- INFO -->
+
+            <div class="info-card">
+
+                <h3>
+                    🔐 User Management
+                </h3>
+
+                <p>
+                    Registered users are displayed below.
+                    Passwords are never displayed for security.
+                </p>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-container">
+
+
+                <div class="table-header">
+
+                    <h2>
+                        Registered Users
+                    </h2>
+
+                    <span class="admin-badge">
+                        USER ACCESS
+                    </span>
+
+                </div>
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                User ID
+                            </th>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="userTableBody">
+
+                        <tr>
+
+                            <td colspan="4"
+                                style="text-align:center;">
+
+                                Loading users...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================= AUTH ================= -->
+
+    <script src="/js/auth.js"></script>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                displayUsername();
+
+                loadUsers();
+
+            }
+        );
+
+
+        /* ================= LOAD USERS ================= */
+
+        async function loadUsers() {
+
+
+            const tableBody =
+                document.getElementById(
+                    "userTableBody"
+                );
+
+
+            try {
+
+
+                const response =
+                    await apiFetch(
+                        "/users/all"
+                    );
+
+
+                if (!response) {
+
+                    return;
+
+                }
+
+
+                if (response.status === 403) {
+
+
+                    tableBody.innerHTML = `
+
+                        <tr>
+
+                            <td colspan="4"
+                                class="error-message">
+
+                                You do not have permission
+                                to view users.
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load users"
+                    );
+
+                }
+
+
+                const users =
+                    await response.json();
+
+
+                tableBody.innerHTML = "";
+
+
+                if (
+                    !Array.isArray(users) ||
+                    users.length === 0
+                ) {
+
+
+                    tableBody.innerHTML = `
+
+                        <tr>
+
+                            <td colspan="4"
+                                style="text-align:center;
+                                       color:#777;
+                                       padding:25px;">
+
+                                No users found.
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                users.forEach(
+                    function (user) {
+
+
+                        const row =
+                            document.createElement(
+                                "tr"
+                            );
+
+
+                        let roleClass =
+                            "staff-role";
+
+
+                        if (
+                            user.role &&
+                            user.role.toUpperCase()
+                                === "ADMIN"
+                        ) {
+
+                            roleClass =
+                                "admin-role";
+
+                        }
+
+
+                        row.innerHTML = `
+
+                            <td>
+                                ${user.userId}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    ${user.username}
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="role-badge
+                                           ${roleClass}">
+
+                                    ${user.role}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="status-badge">
+
+                                    Active
+
+                                </span>
+
+                            </td>
+
+                        `;
+
+
+                        tableBody.appendChild(
+                            row
+                        );
+
+                    }
+                );
+
+
+            }
+            catch (error) {
+
+
+                console.error(
+                    "Error loading users:",
+                    error
+                );
+
+
+                tableBody.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4"
+                            class="error-message">
+
+                            Unable to load users.
+                            Please check the server.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
